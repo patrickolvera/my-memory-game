@@ -24,8 +24,21 @@ function shuffle(array) {
 
     return array;
 }
-
 shuffle(cardList);
+
+//Use the shuffled list to create the cards
+function createCards() {   
+    const deckCards = document.querySelectorAll('.card');
+
+    for (let i = 0; i < cardList.length; i++) {
+        const symbolClass = cardList[i];
+        const iElement = document.createElement('i');
+    
+        iElement.className = "fa " + symbolClass;
+        deckCards[i].appendChild(iElement);
+    }
+}
+createCards();
 
 /*
  * set up the event listener for a card. If a card is clicked:
