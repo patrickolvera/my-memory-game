@@ -1,7 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
-
+const cardList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-anchor', 'fa-leaf', 'fa-bicycle', 'fa-diamond', 'fa-bomb', 'fa-leaf', 'fa-bomb', 'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'];
 
 /*
  * Display the cards on the page
@@ -25,6 +25,7 @@ function shuffle(array) {
     return array;
 }
 
+shuffle(cardList);
 
 /*
  * set up the event listener for a card. If a card is clicked:
