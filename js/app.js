@@ -2,7 +2,8 @@
  * Create a list that holds all of your cards
  */
 const cardList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-anchor', 'fa-leaf', 'fa-bicycle', 'fa-diamond', 'fa-bomb', 'fa-leaf', 'fa-bomb', 'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'];
-const deckCards = document.querySelectorAll('.card');
+const cards = document.querySelectorAll('.card');
+const deck = document.querySelector('.deck');
 
 /*
  * Display the cards on the page
@@ -28,18 +29,18 @@ function shuffle(array) {
 shuffle(cardList);
 
 //Use the shuffled list to create the cards
-function createCards() {   
+function createCardsEl() {   
 
     for (let i = 0; i < cardList.length; i++) {
         const symbolClass = cardList[i];
         const iElement = document.createElement('i');
         
-        deckCards[i].innerHTML = "";
+        cards[i].innerHTML = "";
         iElement.className = "fa " + symbolClass;
-        deckCards[i].appendChild(iElement);
+        cards[i].appendChild(iElement);
     }
 }
-createCards();
+createCardsEl();
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -51,3 +52,8 @@ createCards();
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+deck.addEventListener('click', showCard);
+
+function showCard (event) {
+ event.target.classList += " show open";
+}
