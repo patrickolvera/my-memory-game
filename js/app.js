@@ -2,6 +2,7 @@
  * Create a list that holds all of your cards
  */
 const cardList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-anchor', 'fa-leaf', 'fa-bicycle', 'fa-diamond', 'fa-bomb', 'fa-leaf', 'fa-bomb', 'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'];
+const deckCards = document.querySelectorAll('.card');
 
 /*
  * Display the cards on the page
@@ -28,12 +29,12 @@ shuffle(cardList);
 
 //Use the shuffled list to create the cards
 function createCards() {   
-    const deckCards = document.querySelectorAll('.card');
 
     for (let i = 0; i < cardList.length; i++) {
         const symbolClass = cardList[i];
         const iElement = document.createElement('i');
-    
+        
+        deckCards[i].innerHTML = "";
         iElement.className = "fa " + symbolClass;
         deckCards[i].appendChild(iElement);
     }
