@@ -5,13 +5,6 @@ const cardList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-
 const cards = document.querySelectorAll('.card');
 const deck = document.querySelector('.deck');
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -26,18 +19,25 @@ function shuffle(array) {
 
     return array;
 }
-shuffle(cardList);
 
+/*
+ * Display the cards on the page
+ */
+
+//- shuffle the list of cards using the provided "shuffle" method
+shuffle(cardList);   
+ 
 //Use the shuffled list to create the cards
 function createCardsEl() {   
 
     for (let i = 0; i < cardList.length; i++) {
+        //- loop through each card and create its HTML
         const symbolClass = cardList[i];
         const iElement = document.createElement('i');
         
         cards[i].innerHTML = "";
         iElement.className = "fa " + symbolClass;
-        cards[i].appendChild(iElement);
+        cards[i].appendChild(iElement); //add each card's HTML to the page
     }
 }
 createCardsEl();
@@ -47,7 +47,7 @@ createCardsEl();
  *  
  *  
  *    
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
+ *    
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
@@ -67,21 +67,38 @@ function onCardClick(event) {
 //- if the list already has another card, check to see if the two cards match
     if (cardsOpen.length === 2 && cardsOpen[0].firstChild.classList[1] === cardsOpen[1].firstChild.classList[1]) {
         addToMatched(cardsOpen[0], cardsOpen[1]);
+    } else if (cardsOpen.length === 2) {
+//+ if the cards do not match, remove the cards from the list and hide the card's symbol
+        cardsOpen.splice(0);
+        hideCards(document.getElementsByClassName('open')[0], document.getElementsByClassName('open')[1]);
     }
 }
 
-// - display the card's symbol (put this functionality in another function that you call from this one)
+// - display the card's symbol
 function showCard(event) {
     event.target.classList += " show open";
 }
 
-//- add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+//- add the card to a *list* of "open" cards
 function addToOpen(event) {
     cardsOpen.push(event.target);
 }
 
-//+ if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+//+ if the cards do match, lock the cards in the open position
 function addToMatched(card1, card2) {
     card1.classList = 'card match';
     card2.classList = 'card match';
+    cardsOpen.splice(0);
 }
+
+//remove the cards from the list and hide the card's symbol
+function hideCards(card1, card2){
+    window.setTimeout(function () {card1.classList = 'card';
+    card2.classList = 'card'}, 1000);
+}
+
+/* 
+*   KNOWN BUGS:
+* + Clicking quickly causes cards to stay in shown position
+*
+*/
