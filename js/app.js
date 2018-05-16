@@ -63,25 +63,28 @@ const cardsMatched = [];
 
 function onCardClick(event) {
     showCard(event);
-    addToOpen(event);
+    addToCardsOpen(event);
 //- if the list already has another card, check to see if the two cards match
     if (cardsOpen.length === 2 && cardsOpen[0].firstChild.classList[1] === cardsOpen[1].firstChild.classList[1]) {
         addToMatched(cardsOpen[0], cardsOpen[1]);
-    } else if (cardsOpen.length === 2) {
+    } else if (cardsOpen.length > 1){
 //+ if the cards do not match, remove the cards from the list and hide the card's symbol
-        cardsOpen.splice(0);
-        hideCards(document.getElementsByClassName('open')[0], document.getElementsByClassName('open')[1]);
+        hideCards();
     }
 }
 
 // - display the card's symbol
 function showCard(event) {
-    event.target.classList += " show open";
+    if (cardsOpen.length < 2) {
+        event.target.classList += " show open";
+    }
 }
 
 //- add the card to a *list* of "open" cards
-function addToOpen(event) {
-    cardsOpen.push(event.target);
+function addToCardsOpen(event) {
+    if (cardsOpen.length < 2) {
+        cardsOpen.push(event.target);
+    }
 }
 
 //+ if the cards do match, lock the cards in the open position
@@ -92,13 +95,14 @@ function addToMatched(card1, card2) {
 }
 
 //remove the cards from the list and hide the card's symbol
-function hideCards(card1, card2){
-    window.setTimeout(function () {card1.classList = 'card';
-    card2.classList = 'card'}, 1000);
+function hideCards(){
+    setTimeout(function(){
+        cardsOpen[0].classList = 'card';
+        cardsOpen[1].classList = 'card';
+        cardsOpen.splice(0);
+    }, 500);
 }
 
 /* 
 *   KNOWN BUGS:
-* + Clicking quickly causes cards to stay in shown position
-*
 */
