@@ -24,20 +24,20 @@ function shuffle(array) {
  * Display the cards on the page
  */
 
-//- shuffle the list of cards using the provided "shuffle" method
+// shuffle the list of cards using the provided "shuffle" method
 shuffle(cardList);   
  
-//Use the shuffled list to create the cards
+// Use the shuffled list to create the cards
 function createCardsEl() {   
 
     for (let i = 0; i < cardList.length; i++) {
-        //- loop through each card and create its HTML
+        // loop through each card and create its HTML
         const symbolClass = cardList[i];
         const iElement = document.createElement('i');
         
         cards[i].innerHTML = "";
         iElement.className = "fa " + symbolClass;
-        cards[i].appendChild(iElement); //add each card's HTML to the page
+        cards[i].appendChild(iElement); // add each card's HTML to the page
     }
 }
 createCardsEl();
@@ -48,7 +48,7 @@ createCardsEl();
  *  
  *    
  *    
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+ *   
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
@@ -65,38 +65,40 @@ function onCardClick(event) {
     if (event.target.nodeName === 'LI') {
         showCard(event);
         addToCardsOpen(event);
-//- if the list already has another card, check to see if the two cards match
+// if the list already has another card, check to see if the two cards match
         if (cardsOpen.length === 2 && cardsOpen[0].firstChild.classList[1] === cardsOpen[1].firstChild.classList[1]) {
             addToMatched(cardsOpen[0], cardsOpen[1]);
         } else if (cardsOpen.length > 1){
-//+ if the cards do not match, remove the cards from the list and hide the card's symbol
+// if the cards do not match, remove the cards from the list and hide the card's symbol
             hideCards();
         }
+// increment the move counter and display it on the page
+        addMove();
     }
 }
 
-// - display the card's symbol
+// display the card's symbol
 function showCard(event) {
     if (cardsOpen.length < 2) {
         event.target.classList += " show open";
     }
 }
 
-//- add the card to a *list* of "open" cards
+// add the card to a *list* of "open" cards
 function addToCardsOpen(event) {
     if (cardsOpen.length < 2) {
         cardsOpen.push(event.target);
     }
 }
 
-//+ if the cards do match, lock the cards in the open position
+// if the cards do match, lock the cards in the open position
 function addToMatched(card1, card2) {
     card1.classList = 'card match';
     card2.classList = 'card match';
     cardsOpen.splice(0);
 }
 
-//remove the cards from the list and hide the card's symbol
+// remove the cards from the list and hide the card's symbol
 function hideCards(){
     setTimeout(function(){
         cardsOpen[0].classList = 'card';
@@ -105,6 +107,18 @@ function hideCards(){
     }, 500);
 }
 
+// increment the move counter and display it on the page
+const moveCounter = document.querySelector('.moves');
+const hiddenCounter = document.createElement('span');
+
+function addMove() {
+    hiddenCounter.innerHTML = Number(hiddenCounter.innerHTML) + 1;
+// if two cards have been clicked add 1 to move counter
+    if (Number(hiddenCounter.innerHTML % 2 === 0)) {
+        moveCounter.innerHTML = Number(moveCounter.innerHTML) + 1;
+    }
+}
+
 /* 
-*   KNOWN BUGS: Clicking on the deck adds it to cardsOpen
+*   KNOWN BUGS: Clicking on matched cards counts as a move
 */
