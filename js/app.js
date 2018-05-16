@@ -62,14 +62,16 @@ const cardsOpen = [];
 const cardsMatched = [];
 
 function onCardClick(event) {
-    showCard(event);
-    addToCardsOpen(event);
+    if (event.target.nodeName === 'LI') {
+        showCard(event);
+        addToCardsOpen(event);
 //- if the list already has another card, check to see if the two cards match
-    if (cardsOpen.length === 2 && cardsOpen[0].firstChild.classList[1] === cardsOpen[1].firstChild.classList[1]) {
-        addToMatched(cardsOpen[0], cardsOpen[1]);
-    } else if (cardsOpen.length > 1){
+        if (cardsOpen.length === 2 && cardsOpen[0].firstChild.classList[1] === cardsOpen[1].firstChild.classList[1]) {
+            addToMatched(cardsOpen[0], cardsOpen[1]);
+        } else if (cardsOpen.length > 1){
 //+ if the cards do not match, remove the cards from the list and hide the card's symbol
-        hideCards();
+            hideCards();
+        }
     }
 }
 
@@ -104,5 +106,5 @@ function hideCards(){
 }
 
 /* 
-*   KNOWN BUGS:
+*   KNOWN BUGS: Clicking on the deck adds it to cardsOpen
 */
