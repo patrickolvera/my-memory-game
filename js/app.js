@@ -42,16 +42,6 @@ function createCardsEl() {
 }
 createCardsEl();
 
-/*
- * 
- *  
- *  
- *    
- *    
- *   
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
 /* 
 * set up the event listener for a card. If a card is clicked:
 */
@@ -62,7 +52,7 @@ const cardsOpen = [];
 const cardsMatched = [];
 
 function onCardClick(event) {
-    if (event.target.nodeName === 'LI') {
+    if (event.target.className === 'card') {
         showCard(event);
         addToCardsOpen(event);
 // if the list already has another card, check to see if the two cards match
@@ -119,6 +109,8 @@ function addMove() {
     }
 }
 
+// if all cards have matched, display a message with the final score
+
 /* 
-*   KNOWN BUGS: Clicking on matched cards counts as a move
+*   KNOWN BUGS:
 */
