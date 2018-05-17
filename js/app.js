@@ -64,6 +64,9 @@ function onCardClick(event) {
         }
 // increment the move counter and display it on the page
         addMove();
+
+// if all cards have matched, display a message with the final score
+        gameOver();
     }
 }
 
@@ -84,7 +87,9 @@ function addToCardsOpen(event) {
 // if the cards do match, lock the cards in the open position
 function addToMatched(card1, card2) {
     card1.classList = 'card match';
+    cardsMatched.push(card1);
     card2.classList = 'card match';
+    cardsMatched.push(card2);
     cardsOpen.splice(0);
 }
 
@@ -110,6 +115,22 @@ function addMove() {
 }
 
 // if all cards have matched, display a message with the final score
+const gameOverDiv = document.createElement('div');
+const h3 = document.createElement('h3');
+function gameOver() {
+    if (cardsOpen.length === 1) {
+        gameOverDiv.classList = 'game-over';
+        h3.textContent = 'Congratulations! You\'ve won in ' + moveCounter.innerHTML + ' moves!';
+        gameOverDiv.appendChild(h3);
+        document.querySelector('.container').appendChild(gameOverDiv);
+    }
+}
+
+// Decrease number of stars or change their color depending on number of moves taken
+
+
+// Reset button functionality
+
 
 /* 
 *   KNOWN BUGS:

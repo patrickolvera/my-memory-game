@@ -107,3 +107,24 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+/*
+ * Styles for Game Over message
+ */
+
+ .game-over {
+    position:absolute;
+    top:64%;
+    left:50%;
+    width:400px;
+    height:100px;
+    margin-left:-200px;
+    margin-top:-50px;
+    padding-top: 16px;
+    z-index: 1;
+    border-radius: 8px;
+    border: 1px solid #0698c0;
+    background: #02b3e4;
+    box-shadow: 0 0 15px 5px rgba(46, 61, 73, 0.5);
+    text-align: center;
+ }
