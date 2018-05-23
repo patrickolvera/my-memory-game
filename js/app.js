@@ -4,6 +4,15 @@
 const cardList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-anchor', 'fa-leaf', 'fa-bicycle', 'fa-diamond', 'fa-bomb', 'fa-leaf', 'fa-bomb', 'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'];
 const cards = document.querySelectorAll('.card');
 const deck = document.querySelector('.deck');
+const cardsOpen = [];
+const cardsMatched = [];
+const moveCounter = document.querySelector('.moves');
+const hiddenCounter = document.createElement('span');
+const gameOverDiv = document.createElement('div');
+const h3 = document.createElement('h3');
+const timerMinutes = document.querySelector('.minutes');
+const timerSeconds = document.querySelector('.seconds');
+const timerInterval = setInterval(timer, 1000);
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -48,10 +57,8 @@ createCardsEl();
 
 deck.addEventListener('click', onCardClick);
 
-const cardsOpen = [];
-const cardsMatched = [];
-
 function onCardClick(event) {
+// only execute if card is clicked
     if (event.target.className === 'card') {
         showCard(event);
         addToCardsOpen(event);
@@ -103,9 +110,6 @@ function hideCards(){
 }
 
 // increment the move counter and display it on the page
-const moveCounter = document.querySelector('.moves');
-const hiddenCounter = document.createElement('span');
-
 function addMove() {
     hiddenCounter.innerHTML = Number(hiddenCounter.innerHTML) + 1;
 // if two cards have been clicked add 1 to move counter
@@ -115,14 +119,30 @@ function addMove() {
 }
 
 // if all cards have matched, display a message with the final score
-const gameOverDiv = document.createElement('div');
-const h3 = document.createElement('h3');
 function gameOver() {
-    if (cardsOpen.length === 1) {
+    if (cardsMatched.length === 16) {
         gameOverDiv.classList = 'game-over';
+// game over message
         h3.textContent = 'Congratulations! You\'ve won in ' + moveCounter.innerHTML + ' moves!';
+// add h3 to div and div to container
         gameOverDiv.appendChild(h3);
         document.querySelector('.container').appendChild(gameOverDiv);
+    }
+}
+
+// creates the timer and stops it when the game is over
+function timer() {
+    if (cardsMatched.length === 16) {
+// turn off the timer when game is over
+        clearInterval(timerInterval);
+    } else {
+        if (parseFloat(timerSeconds.textContent) <= 58) {
+            timerSeconds.textContent = parseFloat(timerSeconds.textContent) + 1;
+            timerSeconds.textContent = ('0' + timerSeconds.textContent).slice(-2);
+        } else {
+            timerSeconds.textContent = '00';
+            timerMinutes.textContent = parseFloat(timerMinutes.textContent) + 1;
+        }
     }
 }
 

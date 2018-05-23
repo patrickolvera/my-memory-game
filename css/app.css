@@ -103,6 +103,10 @@ h1 {
     display: inline-block;
 }
 
+.score-panel .minutes{
+    margin-left: 80px;
+}
+
 .score-panel .restart {
     float: right;
     cursor: pointer;
@@ -128,3 +132,4 @@ h1 {
     box-shadow: 0 0 15px 5px rgba(46, 61, 73, 0.5);
     text-align: center;
  }
+
