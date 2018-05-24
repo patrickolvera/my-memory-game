@@ -13,6 +13,7 @@ const h3 = document.createElement('h3');
 const timerMinutes = document.querySelector('.minutes');
 const timerSeconds = document.querySelector('.seconds');
 const timerInterval = setInterval(timer, 1000);
+const stars = document.querySelectorAll('.stars li');
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -74,6 +75,9 @@ function onCardClick(event) {
 
 // if all cards have matched, display a message with the final score
         gameOver();
+
+// decrease the stars the more moves are taken
+        starRating();
     }
 }
 
@@ -147,7 +151,15 @@ function timer() {
 }
 
 // Decrease number of stars or change their color depending on number of moves taken
-
+function starRating() {
+    if (parseFloat(moveCounter.textContent) > 12 && parseFloat(moveCounter.textContent) < 25) {
+        stars[2].style.color = '#fff';
+    } else if (parseFloat(moveCounter.textContent) > 24 && parseFloat(moveCounter.textContent) < 37) {
+        stars[1].style.color = '#fff';
+    } else if (parseFloat(moveCounter.textContent) > 36) {
+        stars[0].style.color = '#fff';
+    }
+}
 
 // Reset button functionality
 
