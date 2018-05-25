@@ -2,19 +2,17 @@
  * Create a list that holds all of your cards
  */
 const cardList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-anchor', 'fa-leaf', 'fa-bicycle', 'fa-diamond', 'fa-bomb', 'fa-leaf', 'fa-bomb', 'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'];
-const cards = document.querySelectorAll('.card');
-const deck = document.querySelector('.deck');
-const restartButton = document.querySelector('.restart');
-const cardsOpen = [];
 const cardsMatched = [];
-const moveCounter = document.querySelector('.moves');
-const hiddenCounter = document.createElement('span');
+const cardsOpen = [];
+const container = document.querySelector('.container');
+const deck = document.querySelector('.deck');
 const gameOverDiv = document.createElement('div');
-const h3 = document.createElement('h3');
+const hiddenCounter = document.createElement('span');
+const moveCounter = document.querySelector('.moves');
+const restartButton = document.querySelector('.restart');
+const stars = document.querySelectorAll('.stars li');
 const timerMinutes = document.querySelector('.minutes');
 const timerSeconds = document.querySelector('.seconds');
-const stars = document.querySelectorAll('.stars li');
-const container = document.querySelector('.container');
 let timerInterval = null;
 let starCounter = 3;
 
@@ -39,15 +37,16 @@ function shuffle(array) {
 
 // shuffle the list of cards using the provided "shuffle" method
 shuffle(cardList);
- 
+
 // Use the shuffled list to create the cards
-function createCardsEl() {   
+function createCardsEl() {
+    const cards = document.querySelectorAll('.card');
 
     for (let i = 0; i < cardList.length; i++) {
         // loop through each card and create its HTML
         const symbolClass = cardList[i];
         const iElement = document.createElement('i');
-        
+
         cards[i].innerHTML = "";
         iElement.className = "fa " + symbolClass;
         cards[i].appendChild(iElement); // add each card's HTML to the page
@@ -55,7 +54,7 @@ function createCardsEl() {
 }
 createCardsEl();
 
-/* 
+/*
 * set up the event listener for a card. If a card is clicked:
 */
 
@@ -68,15 +67,13 @@ function onCardClick(event) {
         addToCardsOpen(event);
 
 // if the open cards list already has another card, check to see if the two cards match
-        if (cardsOpen.length === 2 && cardsOpen[0].firstChild.classList[1] === cardsOpen[1].firstChild.classList[1]) {
-            addToMatched(cardsOpen[0], cardsOpen[1]);
-        } else if (cardsOpen.length > 1){
+        if (cardsOpen.length === 2 && cardsOpen[0].firstChild.classList[1] === cardsOpen[1].firstChild.classList[1]) { 
+            addToMatched(cardsOpen[0], cardsOpen[1])
 // if the cards do not match, remove the cards from the list and hide the card's symbol
-            hideCards();
-        }
+        } else if (cardsOpen.length > 1) { hideCards() }
 
-// initialize timer if not already running
-        if (parseFloat(timerSeconds.textContent) === 0 && parseFloat(timerMinutes.textContent) === 0) {
+// initialize timer if no moves have been made
+        if (hiddenCounter.textContent === '') {
             intervalControl(true, timer, 1000);
         }
 
@@ -134,73 +131,82 @@ function addMove() {
 
 // if all cards have matched, display a message with the final score
 function gameOver() {
+    const h3 = document.createElement('h3');
+    
     if (cardsMatched.length === 16) {
         gameOverDiv.classList = 'game-over';
 // game over message
         h3.textContent = 'Congratulations! You\'ve won in ' + moveCounter.innerHTML + ' moves. With a time of ' + timerMinutes.textContent + ':' + timerSeconds.textContent + '. You earned ' + starCounter + ' stars! Click the reset button to play again.';
 // add h3 to div and div to container
         gameOverDiv.appendChild(h3);
-        document.querySelector('.container').appendChild(gameOverDiv);
+        container.appendChild(gameOverDiv);
     }
 }
 
 // allows the timer to be turned on and off
 function intervalControl(isTimerOn, timerFunc, time) {
-    if(isTimerOn) {
-        timerInterval = setInterval(timerFunc, time);
-    } else {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
+    isTimerOn ? (
+        timerInterval = setInterval(timerFunc, time)
+    ) : (
+        clearInterval(timerInterval),
+        timerInterval = null
+    );
 }
 
 // updates the timers seconds and minutes
 function timer() {
-    if (cardsMatched.length === 16) {
+    (cardsMatched.length === 16) ? intervalControl(false)
 // turn off the timer when game is over
-        intervalControl(false);
-    } else {
-        if (parseFloat(timerSeconds.textContent) <= 58) {
-            timerSeconds.textContent = parseFloat(timerSeconds.textContent) + 1;
-            timerSeconds.textContent = ('0' + timerSeconds.textContent).slice(-2);
-        } else {
-            timerSeconds.textContent = '00';
-            timerMinutes.textContent = parseFloat(timerMinutes.textContent) + 1;
-        }
-    }
+    : (
+        (parseFloat(timerSeconds.textContent) <= 58) ? (
+            timerSeconds.textContent = parseFloat(timerSeconds.textContent) + 1,
+            timerSeconds.textContent = ('0' + timerSeconds.textContent).slice(-2)
+        ) : (
+            timerSeconds.textContent = '00',
+            timerMinutes.textContent = parseFloat(timerMinutes.textContent) + 1
+        )
+    );
 }
 
 // Decrease number of stars or change their color depending on number of moves taken
 function starRating() {
-    if (parseFloat(moveCounter.textContent) === 14) {
-        stars[2].style.color = '#fff';
-        starCounter = 2;
-    } else if (parseFloat(moveCounter.textContent) === 24) {
-        stars[1].style.color = '#fff';
-        starCounter = 1;
-    } else if (parseFloat(moveCounter.textContent) === 36) {
-        stars[0].style.color = '#fff';
-        starCounter = 0;
-    }
+    (parseFloat(moveCounter.textContent) === 14) ? (
+        stars[2].style.color = '#fff',
+        starCounter = 2
+    ) : (parseFloat(moveCounter.textContent) === 24) ? (
+        stars[1].style.color = '#fff',
+        starCounter = 1
+    ) : (parseFloat(moveCounter.textContent) === 36) ? (
+        stars[0].style.color = '#fff',
+        starCounter = 0
+    ) : null;
 }
 
 // Reset button functionality
-restartButton.addEventListener('click', function(){
+restartButton.addEventListener('click', resetGame)
+
+// resets everything back to original state
+function resetGame(){
 // remove gameover message
     if  (container.lastElementChild === gameOverDiv){
         container.removeChild(gameOverDiv);
     }
 
-// hide all the cards and shuffle them
+// hide matched cards and shuffle them
     for (let i = 0; i < cardsMatched.length; i++) {
         cardsMatched[i].classList = 'card';
+    }
+
+// hide open cards and shuffle them
+    for (let i = 0; i < cardsOpen.length; i++) {
+        cardsOpen[i].classList = 'card';
     }
     cardsMatched.splice(0);
     shuffle(cardList);
     createCardsEl();
 
 // reset moves, timer, and stars
-    hiddenCounter.innerHTML = 0;
+    hiddenCounter.innerHTML = '';
     moveCounter.innerHTML = 0;
     timerSeconds.textContent = '00';
     timerMinutes.textContent = '0';
@@ -210,9 +216,4 @@ restartButton.addEventListener('click', function(){
     }
 // reset and start timer
     intervalControl(false);
-    intervalControl(true, timer, 1000);
-});
-
-/* 
-*   KNOWN BUGS:
-*/
+}
