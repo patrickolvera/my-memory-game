@@ -4,6 +4,7 @@
 const cardList = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-anchor', 'fa-leaf', 'fa-bicycle', 'fa-diamond', 'fa-bomb', 'fa-leaf', 'fa-bomb', 'fa-bolt', 'fa-bicycle', 'fa-paper-plane-o', 'fa-cube'];
 const cards = document.querySelectorAll('.card');
 const deck = document.querySelector('.deck');
+const restartButton = document.querySelector('.restart');
 const cardsOpen = [];
 const cardsMatched = [];
 const moveCounter = document.querySelector('.moves');
@@ -12,8 +13,10 @@ const gameOverDiv = document.createElement('div');
 const h3 = document.createElement('h3');
 const timerMinutes = document.querySelector('.minutes');
 const timerSeconds = document.querySelector('.seconds');
-const timerInterval = setInterval(timer, 1000);
 const stars = document.querySelectorAll('.stars li');
+const container = document.querySelector('.container');
+let timerInterval = null;
+let starCounter = 3;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -35,7 +38,7 @@ function shuffle(array) {
  */
 
 // shuffle the list of cards using the provided "shuffle" method
-shuffle(cardList);   
+shuffle(cardList);
  
 // Use the shuffled list to create the cards
 function createCardsEl() {   
@@ -63,21 +66,28 @@ function onCardClick(event) {
     if (event.target.className === 'card') {
         showCard(event);
         addToCardsOpen(event);
-// if the list already has another card, check to see if the two cards match
+
+// if the open cards list already has another card, check to see if the two cards match
         if (cardsOpen.length === 2 && cardsOpen[0].firstChild.classList[1] === cardsOpen[1].firstChild.classList[1]) {
             addToMatched(cardsOpen[0], cardsOpen[1]);
         } else if (cardsOpen.length > 1){
 // if the cards do not match, remove the cards from the list and hide the card's symbol
             hideCards();
         }
+
+// initialize timer if not already running
+        if (parseFloat(timerSeconds.textContent) === 0 && parseFloat(timerMinutes.textContent) === 0) {
+            intervalControl(true, timer, 1000);
+        }
+
 // increment the move counter and display it on the page
         addMove();
 
-// if all cards have matched, display a message with the final score
-        gameOver();
-
 // decrease the stars the more moves are taken
         starRating();
+
+// if all cards have matched, display a message with the final score
+        gameOver();
     }
 }
 
@@ -127,18 +137,28 @@ function gameOver() {
     if (cardsMatched.length === 16) {
         gameOverDiv.classList = 'game-over';
 // game over message
-        h3.textContent = 'Congratulations! You\'ve won in ' + moveCounter.innerHTML + ' moves!';
+        h3.textContent = 'Congratulations! You\'ve won in ' + moveCounter.innerHTML + ' moves. With a time of ' + timerMinutes.textContent + ':' + timerSeconds.textContent + '. You earned ' + starCounter + ' stars! Click the reset button to play again.';
 // add h3 to div and div to container
         gameOverDiv.appendChild(h3);
         document.querySelector('.container').appendChild(gameOverDiv);
     }
 }
 
-// creates the timer and stops it when the game is over
+// allows the timer to be turned on and off
+function intervalControl(isTimerOn, timerFunc, time) {
+    if(isTimerOn) {
+        timerInterval = setInterval(timerFunc, time);
+    } else {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
+
+// updates the timers seconds and minutes
 function timer() {
     if (cardsMatched.length === 16) {
 // turn off the timer when game is over
-        clearInterval(timerInterval);
+        intervalControl(false);
     } else {
         if (parseFloat(timerSeconds.textContent) <= 58) {
             timerSeconds.textContent = parseFloat(timerSeconds.textContent) + 1;
@@ -152,17 +172,46 @@ function timer() {
 
 // Decrease number of stars or change their color depending on number of moves taken
 function starRating() {
-    if (parseFloat(moveCounter.textContent) > 12 && parseFloat(moveCounter.textContent) < 25) {
+    if (parseFloat(moveCounter.textContent) === 14) {
         stars[2].style.color = '#fff';
-    } else if (parseFloat(moveCounter.textContent) > 24 && parseFloat(moveCounter.textContent) < 37) {
+        starCounter = 2;
+    } else if (parseFloat(moveCounter.textContent) === 24) {
         stars[1].style.color = '#fff';
-    } else if (parseFloat(moveCounter.textContent) > 36) {
+        starCounter = 1;
+    } else if (parseFloat(moveCounter.textContent) === 36) {
         stars[0].style.color = '#fff';
+        starCounter = 0;
     }
 }
 
 // Reset button functionality
+restartButton.addEventListener('click', function(){
+// remove gameover message
+    if  (container.lastElementChild === gameOverDiv){
+        container.removeChild(gameOverDiv);
+    }
 
+// hide all the cards and shuffle them
+    for (let i = 0; i < cardsMatched.length; i++) {
+        cardsMatched[i].classList = 'card';
+    }
+    cardsMatched.splice(0);
+    shuffle(cardList);
+    createCardsEl();
+
+// reset moves, timer, and stars
+    hiddenCounter.innerHTML = 0;
+    moveCounter.innerHTML = 0;
+    timerSeconds.textContent = '00';
+    timerMinutes.textContent = '0';
+
+    for (let i = 0; i < stars.length; i++) {
+        stars[i].style.color = '#000';
+    }
+// reset and start timer
+    intervalControl(false);
+    intervalControl(true, timer, 1000);
+});
 
 /* 
 *   KNOWN BUGS:
