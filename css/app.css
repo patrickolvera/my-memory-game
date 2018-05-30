@@ -22,6 +22,7 @@ body {
 }
 
 .container {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,7 +40,6 @@ h1 {
 
 .deck {
     width: 660px;
-    min-height: 680px;
     background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
     padding: 32px;
     border-radius: 10px;
@@ -118,12 +118,8 @@ h1 {
 
  .game-over {
     position:absolute;
-    top:64%;
-    left:50%;
     width:400px;
     height:90px;
-    margin-left:-200px;
-    margin-top:-45px;
     padding: 10px 10px;
     z-index: 1;
     border-radius: 8px;
@@ -138,3 +134,41 @@ h1 {
     font-size: 0.75em;
     margin-top: 16px;
  }
+
+/*
+ * Media Queries
+ */
+
+@media screen and (max-width: 680px) {
+
+    .deck {
+        width: 95%;
+        height: 620px;
+        padding: 20px;
+    }
+    .deck .card {
+        width: 23%;
+        height: 90px;
+    }
+    .game-over {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 400px) {
+
+    .deck {
+        width: 95%;
+        height: 540px;
+    }
+    .deck .card {
+        width: 23%;
+        height: 80px;
+    }
+}
+
+@media screen and (min-width: 681px) {
+    .deck {
+        min-height: 680px;
+    }
+}

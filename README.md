@@ -6,6 +6,12 @@ This is a matching memmory game. The goal is to flip over a card and match it wi
 
 There is a move counter, star performance rating, a timer, and a reset button. Have fun!
 
+## Dependencies
+
+* Font Awesome : https://github.com/FortAwesome/Font-Awesome
+* Google Fonts : https://fonts.google.com/
+* Vanilla.js : http://vanilla-js.com/
+
 ## Disclaimer
 
 The starting files (1st and 2nd commit) were supplied by Udacity as part of their Web Developer Nano Degree.
