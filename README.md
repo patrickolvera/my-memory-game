@@ -1,5 +1,8 @@
 # My-Memory-Game
 
+## Just Wanna Play?
+See it live at: [https://matching-game-patrickolvera.netlify.com/](https://matching-game-patrickolvera.netlify.com/)
+
 ## Overview
 
 This is a matching memmory game. The goal is to flip over a card and match it with an unflipped one. When two cards are matched they remain in the flipped over possition. When all the cards are matched you win the game.
